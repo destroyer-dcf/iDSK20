@@ -462,19 +462,29 @@ int main(int argc, char **argv)
 			// Don't set NoOptionSet = false here, let the default listing logic handle it
 		}
 		else if (Command == "list") {
-			// Check if we have file argument
-			bool hasDskArg = (argc >= 4); // list <dsk> <file>
+			// Determine if DSK is provided or use environment variable
+			const char* envDskFile = getenv("DISC_DSK_FILE");
+			bool hasEnvDsk = (envDskFile != NULL && strlen(envDskFile) > 0);
+			
+			// If we have 3 args (prog list file), use env var
+			// If we have 4+ args (prog list dsk file), use arg
+			bool hasDskArg = (argc >= 4);
 			int fileArgIndex = hasDskArg ? 3 : 2;
 			
-			if (argc < fileArgIndex + 1) {
+			if (argc < 3) {
 				cerr << "Usage: " << PROGNAME << " list <dskfile> <file> [-p]" << endl;
 				cerr << "Or set DISC_DSK_FILE environment variable and use: " << PROGNAME << " list <file> [-p]" << endl;
 				return EXIT_FAILURE;
 			}
 			
 			// Get DSK file
-			string dskFile = GetDskFile(argc, argv, 2, hasDskArg);
-			if (dskFile.empty()) {
+			string dskFile;
+			if (hasDskArg) {
+				dskFile = string(argv[2]);
+			} else if (hasEnvDsk) {
+				dskFile = string(envDskFile);
+			} else {
+				cerr << "Error: No DSK file specified and DISC_DSK_FILE not set" << endl;
 				cerr << "Usage: " << PROGNAME << " list <dskfile> <file> [-p]" << endl;
 				cerr << "Or set DISC_DSK_FILE environment variable and use: " << PROGNAME << " list <file> [-p]" << endl;
 				return EXIT_FAILURE;
@@ -550,8 +560,12 @@ int main(int argc, char **argv)
 				}
 			} else {
 				// Use traditional flag-based parsing
+				// Track if we've added the first file (to avoid adding multiple files)
+				bool firstFileAdded = false;
+				
 				for (int i = fileArgIndex; i < argc; i++) {
 					string arg = argv[i];
+					
 					if (arg == "-t" && i + 1 < argc) {
 						AmsdosType = atoi(argv[++i]);
 					}
@@ -574,24 +588,37 @@ int main(int argc, char **argv)
 						UserNumber = atoi(argv[++i]);
 					}
 					else if (arg[0] != '-') {
-						AmsdosFileList.push_back(arg);
+						// Add the file (should be the first non-flag argument after fileArgIndex)
+						if (!firstFileAdded) {
+							AmsdosFileList.push_back(arg);
+							firstFileAdded = true;
+						}
 					}
 				}
 			}
 		}
 		else if (Command == "era" || Command == "rm") {
-			bool hasDskArg = (argc >= 4); // era <dsk> <file>
+			// Determine if DSK is provided or use environment variable
+			const char* envDskFile = getenv("DISC_DSK_FILE");
+			bool hasEnvDsk = (envDskFile != NULL && strlen(envDskFile) > 0);
+			
+			bool hasDskArg = (argc >= 4);
 			int fileArgIndex = hasDskArg ? 3 : 2;
 			
-			if (argc < fileArgIndex + 1) {
+			if (argc < 3) {
 				cerr << "Usage: " << PROGNAME << " era <dskfile> <file>" << endl;
 				cerr << "Or set DISC_DSK_FILE environment variable and use: " << PROGNAME << " era <file>" << endl;
 				return EXIT_FAILURE;
 			}
 			
 			// Get DSK file
-			string dskFile = GetDskFile(argc, argv, 2, hasDskArg);
-			if (dskFile.empty()) {
+			string dskFile;
+			if (hasDskArg) {
+				dskFile = string(argv[2]);
+			} else if (hasEnvDsk) {
+				dskFile = string(envDskFile);
+			} else {
+				cerr << "Error: No DSK file specified and DISC_DSK_FILE not set" << endl;
 				cerr << "Usage: " << PROGNAME << " era <dskfile> <file>" << endl;
 				cerr << "Or set DISC_DSK_FILE environment variable and use: " << PROGNAME << " era <file>" << endl;
 				return EXIT_FAILURE;
@@ -605,18 +632,27 @@ int main(int argc, char **argv)
 			}
 		}
 		else if (Command == "get" || Command == "export") {
-			bool hasDskArg = (argc >= 4); // get <dsk> <file>
+			// Determine if DSK is provided or use environment variable
+			const char* envDskFile = getenv("DISC_DSK_FILE");
+			bool hasEnvDsk = (envDskFile != NULL && strlen(envDskFile) > 0);
+			
+			bool hasDskArg = (argc >= 4);
 			int fileArgIndex = hasDskArg ? 3 : 2;
 			
-			if (argc < fileArgIndex + 1) {
+			if (argc < 3) {
 				cerr << "Usage: " << PROGNAME << " get <dskfile> <file>" << endl;
 				cerr << "Or set DISC_DSK_FILE environment variable and use: " << PROGNAME << " get <file>" << endl;
 				return EXIT_FAILURE;
 			}
 			
 			// Get DSK file
-			string dskFile = GetDskFile(argc, argv, 2, hasDskArg);
-			if (dskFile.empty()) {
+			string dskFile;
+			if (hasDskArg) {
+				dskFile = string(argv[2]);
+			} else if (hasEnvDsk) {
+				dskFile = string(envDskFile);
+			} else {
+				cerr << "Error: No DSK file specified and DISC_DSK_FILE not set" << endl;
 				cerr << "Usage: " << PROGNAME << " get <dskfile> <file>" << endl;
 				cerr << "Or set DISC_DSK_FILE environment variable and use: " << PROGNAME << " get <file>" << endl;
 				return EXIT_FAILURE;
@@ -630,18 +666,27 @@ int main(int argc, char **argv)
 			}
 		}
 		else if (Command == "basic") {
-			bool hasDskArg = (argc >= 4); // basic <dsk> <file>
+			// Determine if DSK is provided or use environment variable
+			const char* envDskFile = getenv("DISC_DSK_FILE");
+			bool hasEnvDsk = (envDskFile != NULL && strlen(envDskFile) > 0);
+			
+			bool hasDskArg = (argc >= 4);
 			int fileArgIndex = hasDskArg ? 3 : 2;
 			
-			if (argc < fileArgIndex + 1) {
+			if (argc < 3) {
 				cerr << "Usage: " << PROGNAME << " basic <dskfile> <file> [-p]" << endl;
 				cerr << "Or set DISC_DSK_FILE environment variable and use: " << PROGNAME << " basic <file> [-p]" << endl;
 				return EXIT_FAILURE;
 			}
 			
 			// Get DSK file
-			string dskFile = GetDskFile(argc, argv, 2, hasDskArg);
-			if (dskFile.empty()) {
+			string dskFile;
+			if (hasDskArg) {
+				dskFile = string(argv[2]);
+			} else if (hasEnvDsk) {
+				dskFile = string(envDskFile);
+			} else {
+				cerr << "Error: No DSK file specified and DISC_DSK_FILE not set" << endl;
 				cerr << "Usage: " << PROGNAME << " basic <dskfile> <file> [-p]" << endl;
 				cerr << "Or set DISC_DSK_FILE environment variable and use: " << PROGNAME << " basic <file> [-p]" << endl;
 				return EXIT_FAILURE;
@@ -659,18 +704,27 @@ int main(int argc, char **argv)
 			}
 		}
 		else if (Command == "dams") {
-			bool hasDskArg = (argc >= 4); // dams <dsk> <file>
+			// Determine if DSK is provided or use environment variable
+			const char* envDskFile = getenv("DISC_DSK_FILE");
+			bool hasEnvDsk = (envDskFile != NULL && strlen(envDskFile) > 0);
+			
+			bool hasDskArg = (argc >= 4);
 			int fileArgIndex = hasDskArg ? 3 : 2;
 			
-			if (argc < fileArgIndex + 1) {
+			if (argc < 3) {
 				cerr << "Usage: " << PROGNAME << " dams <dskfile> <file>" << endl;
 				cerr << "Or set DISC_DSK_FILE environment variable and use: " << PROGNAME << " dams <file>" << endl;
 				return EXIT_FAILURE;
 			}
 			
 			// Get DSK file
-			string dskFile = GetDskFile(argc, argv, 2, hasDskArg);
-			if (dskFile.empty()) {
+			string dskFile;
+			if (hasDskArg) {
+				dskFile = string(argv[2]);
+			} else if (hasEnvDsk) {
+				dskFile = string(envDskFile);
+			} else {
+				cerr << "Error: No DSK file specified and DISC_DSK_FILE not set" << endl;
 				cerr << "Usage: " << PROGNAME << " dams <dskfile> <file>" << endl;
 				cerr << "Or set DISC_DSK_FILE environment variable and use: " << PROGNAME << " dams <file>" << endl;
 				return EXIT_FAILURE;
@@ -682,18 +736,27 @@ int main(int argc, char **argv)
 			AmsdosFileList.push_back(argv[fileArgIndex]);
 		}
 		else if (Command == "disasm" || Command == "disassemble") {
-			bool hasDskArg = (argc >= 4); // disasm <dsk> <file>
+			// Determine if DSK is provided or use environment variable
+			const char* envDskFile = getenv("DISC_DSK_FILE");
+			bool hasEnvDsk = (envDskFile != NULL && strlen(envDskFile) > 0);
+			
+			bool hasDskArg = (argc >= 4);
 			int fileArgIndex = hasDskArg ? 3 : 2;
 			
-			if (argc < fileArgIndex + 1) {
+			if (argc < 3) {
 				cerr << "Usage: " << PROGNAME << " disasm <dskfile> <file>" << endl;
 				cerr << "Or set DISC_DSK_FILE environment variable and use: " << PROGNAME << " disasm <file>" << endl;
 				return EXIT_FAILURE;
 			}
 			
 			// Get DSK file
-			string dskFile = GetDskFile(argc, argv, 2, hasDskArg);
-			if (dskFile.empty()) {
+			string dskFile;
+			if (hasDskArg) {
+				dskFile = string(argv[2]);
+			} else if (hasEnvDsk) {
+				dskFile = string(envDskFile);
+			} else {
+				cerr << "Error: No DSK file specified and DISC_DSK_FILE not set" << endl;
 				cerr << "Usage: " << PROGNAME << " disasm <dskfile> <file>" << endl;
 				cerr << "Or set DISC_DSK_FILE environment variable and use: " << PROGNAME << " disasm <file>" << endl;
 				return EXIT_FAILURE;
@@ -705,18 +768,27 @@ int main(int argc, char **argv)
 			AmsdosFileList.push_back(argv[fileArgIndex]);
 		}
 		else if (Command == "ascii") {
-			bool hasDskArg = (argc >= 4); // ascii <dsk> <file>
+			// Determine if DSK is provided or use environment variable
+			const char* envDskFile = getenv("DISC_DSK_FILE");
+			bool hasEnvDsk = (envDskFile != NULL && strlen(envDskFile) > 0);
+			
+			bool hasDskArg = (argc >= 4);
 			int fileArgIndex = hasDskArg ? 3 : 2;
 			
-			if (argc < fileArgIndex + 1) {
+			if (argc < 3) {
 				cerr << "Usage: " << PROGNAME << " ascii <dskfile> <file>" << endl;
 				cerr << "Or set DISC_DSK_FILE environment variable and use: " << PROGNAME << " ascii <file>" << endl;
 				return EXIT_FAILURE;
 			}
 			
 			// Get DSK file
-			string dskFile = GetDskFile(argc, argv, 2, hasDskArg);
-			if (dskFile.empty()) {
+			string dskFile;
+			if (hasDskArg) {
+				dskFile = string(argv[2]);
+			} else if (hasEnvDsk) {
+				dskFile = string(envDskFile);
+			} else {
+				cerr << "Error: No DSK file specified and DISC_DSK_FILE not set" << endl;
 				cerr << "Usage: " << PROGNAME << " ascii <dskfile> <file>" << endl;
 				cerr << "Or set DISC_DSK_FILE environment variable and use: " << PROGNAME << " ascii <file>" << endl;
 				return EXIT_FAILURE;
@@ -728,22 +800,30 @@ int main(int argc, char **argv)
 			AmsdosFileList.push_back(argv[fileArgIndex]);
 		}
 		else if (Command == "run") {
-			bool hasDskArg = (argc >= 4); // run <dsk> <file>
+			// Determine if DSK is provided or use environment variable
+			const char* envDskFile = getenv("DISC_DSK_FILE");
+			bool hasEnvDsk = (envDskFile != NULL && strlen(envDskFile) > 0);
+			
+			bool hasDskArg = (argc >= 4);
 			int fileArgIndex = hasDskArg ? 3 : 2;
 			
-			if (argc < fileArgIndex + 1) {
+			if (argc < 3) {
 				cerr << "Usage: " << PROGNAME << " run <dskfile> <file>" << endl;
 				cerr << "Or set DISC_DSK_FILE environment variable and use: " << PROGNAME << " run <file>" << endl;
 				cerr << "Set CPC_MODEL environment variable to specify CPC model (464, 664, 6128) - default: 6128" << endl;
 				return EXIT_FAILURE;
 			}
 			
-			// Get DSK file - for run command, prefer environment variable
-			string dskFile = GetDskFile(argc, argv, 2, false); // Always try env var first
-			if (dskFile.empty()) {
+			// Get DSK file
+			string dskFile;
+			if (hasDskArg) {
+				dskFile = string(argv[2]);
+			} else if (hasEnvDsk) {
+				dskFile = string(envDskFile);
+			} else {
+				cerr << "Error: No DSK file specified and DISC_DSK_FILE not set" << endl;
 				cerr << "Usage: " << PROGNAME << " run <dskfile> <file>" << endl;
 				cerr << "Or set DISC_DSK_FILE environment variable and use: " << PROGNAME << " run <file>" << endl;
-				cerr << "Set CPC_MODEL environment variable to specify CPC model (464, 664, 6128) - default: 6128" << endl;
 				return EXIT_FAILURE;
 			}
 			DskFile = dskFile;
@@ -753,19 +833,27 @@ int main(int argc, char **argv)
 			AmsdosFileList.push_back(argv[fileArgIndex]);
 		}
 		else if (Command == "hex") {
-			// Check if we have file argument
-			bool hasDskArg = (argc >= 4); // hex <dsk> <file>
-			int fileArgIndex = hasDskArg ? 3 : 2; // If DSK provided, file is at 3, otherwise at 2
+			// Determine if DSK is provided or use environment variable
+			const char* envDskFile = getenv("DISC_DSK_FILE");
+			bool hasEnvDsk = (envDskFile != NULL && strlen(envDskFile) > 0);
 			
-			if (argc < fileArgIndex + 1) {
+			bool hasDskArg = (argc >= 4);
+			int fileArgIndex = hasDskArg ? 3 : 2;
+			
+			if (argc < 3) {
 				cerr << "Usage: " << PROGNAME << " hex <dskfile> <file>" << endl;
 				cerr << "Or set DISC_DSK_FILE environment variable and use: " << PROGNAME << " hex <file>" << endl;
 				return EXIT_FAILURE;
 			}
 			
 			// Get DSK file
-			string dskFile = GetDskFile(argc, argv, 2, hasDskArg);
-			if (dskFile.empty()) {
+			string dskFile;
+			if (hasDskArg) {
+				dskFile = string(argv[2]);
+			} else if (hasEnvDsk) {
+				dskFile = string(envDskFile);
+			} else {
+				cerr << "Error: No DSK file specified and DISC_DSK_FILE not set" << endl;
 				cerr << "Usage: " << PROGNAME << " hex <dskfile> <file>" << endl;
 				cerr << "Or set DISC_DSK_FILE environment variable and use: " << PROGNAME << " hex <file>" << endl;
 				return EXIT_FAILURE;
@@ -1095,11 +1183,10 @@ int main(int argc, char **argv)
 void help(void)
 {
 	cout << endl;
-
-	cout << colorize("▛▀▖▗       ", COLOR_BRIGHT_YELLOW) << endl;
-	cout << colorize("▌ ▌▄ ▞▀▘▞▀▖", COLOR_BRIGHT_YELLOW) << endl;
-	cout << colorize("▌ ▌▐ ▝▀▖▌ ▖", COLOR_BRIGHT_YELLOW) << endl;
-	cout << colorize("▀▀ ▀▘▀▀ ▝▀ ", COLOR_BRIGHT_YELLOW) << endl;                              
+	cout << colorize("▗ ▛▀▖▞▀▖▌ ▌▞▀▖▞▀▖", COLOR_BRIGHT_YELLOW) << endl;
+	cout << colorize("▄ ▌ ▌▚▄ ▙▞  ▗▘▌▞▌", COLOR_BRIGHT_YELLOW) << endl;
+	cout << colorize("▐ ▌ ▌▖ ▌▌▝▖▗▘ ▛ ▌", COLOR_BRIGHT_YELLOW) << endl;
+	cout << colorize("▀▘▀▀ ▝▀ ▘ ▘▀▀▘▝▀ ", COLOR_BRIGHT_YELLOW) << endl;              
 	cout << colorize(VERSION, COLOR_BRIGHT_GREEN) << endl;
     cout << colorize("by Destroyer 2025", COLOR_YELLOW) << endl;
 	cout << colorize("https://github.com/CPCReady/tools", COLOR_YELLOW) << endl;
