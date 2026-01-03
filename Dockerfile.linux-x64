@@ -1,0 +1,15 @@
+FROM ubuntu:20.04
+
+# Evitar prompts interactivos
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Instalar herramientas de compilación
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    cmake \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /workspace
+
+# Comando por defecto para compilar
+CMD ["sh", "-c", "mkdir -p build-linux-x64 && cd build-linux-x64 && cmake .. && make -j$(nproc) && cp disc ../dist/linux-x64/ || echo 'Error compilando Linux x64'"]

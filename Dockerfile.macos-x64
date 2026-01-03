@@ -1,0 +1,23 @@
+# Nota: Este Dockerfile requiere Docker Desktop con soporte para macOS containers
+# o usar GitHub Actions con macos-latest runner
+
+FROM --platform=linux/amd64 ubuntu:20.04
+
+# Instalar osxcross para cross-compilation a macOS
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    cmake \
+    clang \
+    git \
+    wget \
+    libxml2-dev \
+    libssl-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Nota: osxcross requiere el SDK de macOS que no puede distribuirse
+# Este Dockerfile es un placeholder para documentación
+WORKDIR /workspace
+
+CMD ["echo", "macOS cross-compilation requiere SDK de Apple - usar GitHub Actions"]
