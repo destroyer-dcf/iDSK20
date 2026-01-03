@@ -6,7 +6,7 @@
 
 ## Instalación Local (Recomendada)
 
-Puedes instalar desde el archivo compilado en la carpeta `build/` o descargan la version para tu sistema operativo desde **[Releases](https://github.com/destroyer-dcf/iDSK20/releases)** :
+Puedes instalar desde el archivo compilado en la carpeta `build/` o descargan la version para tu sistema operativo desde **[Releases](https://github.com/destroyer.dcf/iDSK20/releases)** :
 
 ```bash
 # En macOS/Linux

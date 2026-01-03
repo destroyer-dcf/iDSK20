@@ -755,7 +755,7 @@ Actualmente solo soporta discos estándar de 40 pistas.
 - **[Comandos](COMANDOS.md)** - Referencia completa
 - **[Ejemplos Prácticos](EJEMPLOS.md)** - Scripts y casos de uso
 - **[Variables de Entorno](VARIABLES.md)** - Configuración
-- **GitHub Issues** - https://github.com/CPCReady/tools/issues
+- **GitHub Issues** - https://github.com/destroyer.dcf/iDSK20/issues
 
 ---
 

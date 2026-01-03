@@ -1189,7 +1189,7 @@ void help(void)
 	cout << colorize("▀▘▀▀ ▝▀ ▘ ▘▀▀▘▝▀ ", COLOR_BRIGHT_YELLOW) << endl;              
 	cout << colorize(VERSION, COLOR_BRIGHT_GREEN) << endl;
     cout << colorize("by Destroyer 2025", COLOR_YELLOW) << endl;
-	cout << colorize("https://github.com/CPCReady/tools", COLOR_YELLOW) << endl;
+	cout << colorize("https://github.com/destroyer.dcf/iDSK20", COLOR_YELLOW) << endl;
     cout << colorize("License: MIT", COLOR_YELLOW) << endl;
 	cout << endl;
 	cout << colorize("iDSK20 is a fork of idsk created by:)", COLOR_DIM) << endl;

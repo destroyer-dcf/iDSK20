@@ -7,7 +7,7 @@
 ## Requisitos Previos
 
 **Nota**
-> **Si no quieres compilar te puedes descarga la version para tu sistema operativo desde [Releases](https://github.com/destroyer-dcf/iDSK20/releases)**
+> **Si no quieres compilar te puedes descarga la version para tu sistema operativo desde [Releases](https://github.com/destroyer.dcf/iDSK20/releases)**
 
 Antes de compilar iDSK20, necesitas tener instalado:
 
