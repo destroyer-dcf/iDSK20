@@ -48,22 +48,30 @@ jobs:
     
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v3
+      with:
+        platforms: arm64
     
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3
-    
-    - name: Build with Docker
+    - name: Install cross-compilation tools
       run: |
-        mkdir -p dist/linux-arm64
-        docker build -f Dockerfile.linux-arm64 -t idsk-arm64 .
-        docker run --rm -v $(pwd):/workspace idsk-arm64
+        sudo apt-get update
+        sudo apt-get install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu cmake
+    
+    - name: Build for ARM64
+      run: |
+        mkdir -p build-arm64
+        cd build-arm64
+        cmake .. \
+          -DCMAKE_SYSTEM_NAME=Linux \
+          -DCMAKE_SYSTEM_PROCESSOR=aarch64 \
+          -DCMAKE_C_COMPILER=aarch64-linux-gnu-gcc \
+          -DCMAKE_CXX_COMPILER=aarch64-linux-gnu-g++
+        make -j$(nproc)
     
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: iDSK20-linux-arm64
-        path: dist/linux-arm64/iDSK20
-      if: success()
+        path: build-arm64/iDSK20
 
   build-macos:
     name: Build macOS
