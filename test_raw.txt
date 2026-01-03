@@ -1,4 +1,0 @@
-Esta es una linea de texto
-Esta es otra linea
-Y esta es la tercera linea
-Con terminaciones Unix (LF)
