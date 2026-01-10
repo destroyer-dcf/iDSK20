@@ -12,4 +12,4 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /workspace
 
 # Comando por defecto para compilar
-CMD ["sh", "-c", "mkdir -p build-linux-x64 && cd build-linux-x64 && cmake .. && make -j$(nproc) && cp disc ../dist/linux-x64/ || echo 'Error compilando Linux x64'"]
+CMD ["sh", "-c", "mkdir -p build-linux-x64 && cd build-linux-x64 && cmake .. && make -j$(nproc) && cp iDSK20 ../dist/linux-x64/ || echo 'Error compilando Linux x64'"]

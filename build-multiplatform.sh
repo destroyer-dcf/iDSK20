@@ -342,16 +342,16 @@ main() {
         case "$(uname -s)" in
             Darwin)
                 # Desde macOS, compilar Linux
-                build_with_docker "linux-x64" "Dockerfile.linux-x64" "linux-x64" "disc"
-                build_with_docker "linux-arm64" "Dockerfile.linux-arm64" "linux-arm64" "disc"
+                build_with_docker "linux-x64" "Dockerfile.linux-x64" "linux-x64" "iDSK20"
+                build_with_docker "linux-arm64" "Dockerfile.linux-arm64" "linux-arm64" "iDSK20"
                 ;;
             Linux)
                 # Desde Linux, compilar para otras arquitecturas si no es nativa
                 if [[ "$(uname -m)" != "aarch64" ]]; then
-                    build_with_docker "linux-arm64" "Dockerfile.linux-arm64" "linux-arm64" "disc"
+                    build_with_docker "linux-arm64" "Dockerfile.linux-arm64" "linux-arm64" "iDSK20"
                 fi
                 if [[ "$(uname -m)" != "x86_64" ]]; then
-                    build_with_docker "linux-x64" "Dockerfile.linux-x64" "linux-x64" "disc"
+                    build_with_docker "linux-x64" "Dockerfile.linux-x64" "linux-x64" "iDSK20"
                 fi
                 ;;
         esac

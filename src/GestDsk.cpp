@@ -1105,13 +1105,13 @@ bool DSK::OnViewFic(int nItem) {
 bool DSK::Hexdecimal() {
 
 	int TailleCourante=0;
-	char OffSet[ 7 ];
+	char OffSet[ 8 ];
 	const char * CodeHexa = "0123456789ABCDEF";
 	
 	while (TailleCourante <=  TailleFic ) {
 		// display the offset 
-		memset( OffSet, 0 , 7 );
-		snprintf( OffSet,6,"#%.4X:", TailleCourante );
+		memset( OffSet, 0 , 8 );
+		snprintf( OffSet,8,"#%.4X:", TailleCourante );
 		strcat( Listing, OffSet );
 		strcat( Listing, " ");
 		char Ascii[ 18 ]; 

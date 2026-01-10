@@ -12,4 +12,4 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /workspace
 
 # Comando por defecto para compilar
-CMD ["sh", "-c", "mkdir -p build-linux-arm64 && cd build-linux-arm64 && cmake .. && make -j$(nproc) && cp disc ../dist/linux-arm64/ || echo 'Error compilando Linux ARM64'"]
+CMD ["sh", "-c", "mkdir -p build-linux-arm64 && cd build-linux-arm64 && cmake .. && make -j$(nproc) && cp iDSK20 ../dist/linux-arm64/ || echo 'Error compilando Linux ARM64'"]
