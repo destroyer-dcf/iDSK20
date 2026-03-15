@@ -554,6 +554,23 @@ int main(int argc, char **argv)
 					Read_only = cpcReadOnly;
 					System_file = cpcSystemFile;
 					AmsdosFileList.push_back(filename);
+					
+					// Process additional flags after CPC-style syntax
+					for (int i = fileArgIndex + 1; i < argc; i++) {
+						string arg = argv[i];
+						if (arg == "-f") {
+							Force_Overwrite = true;
+						}
+						else if (arg == "-o") {
+							Read_only = true;
+						}
+						else if (arg == "-s") {
+							System_file = true;
+						}
+						else if (arg == "-u" && i + 1 < argc) {
+							UserNumber = atoi(argv[++i]);
+						}
+					}
 				} else {
 					cerr << "Error parsing CPC-style syntax: " << firstFileArg << endl;
 					return EXIT_FAILURE;
